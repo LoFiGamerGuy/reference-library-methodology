@@ -1,0 +1,31 @@
+# Local environment
+.env
+.env.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor folders
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Library content (in case anyone clones this and adds books in this repo by mistake)
+# The library should live OUTSIDE this repo — these are defensive ignores.
+my-library/
+*-library/
+test-library/

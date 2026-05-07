@@ -1,0 +1,59 @@
+{
+  "_comment": "Configuration for tools/tag_library.py. Defines how books get tagged with project + topic tags based on their library category, specific slug, or chapter keywords. Customize per your portfolio.",
+
+  "category_defaults": {
+    "ai-agents": {
+      "projects": ["project-a"],
+      "topics": ["agents", "llm", "orchestration"]
+    },
+    "ml-oreilly": {
+      "projects": ["project-a"],
+      "topics": ["machine-learning", "ml-ops"]
+    },
+    "shells-scripting": {
+      "projects": ["project-b"],
+      "topics": ["bash", "shell", "linux", "automation"]
+    },
+    "linux-no-starch": {
+      "projects": ["project-b"],
+      "topics": ["linux", "systems", "security"]
+    },
+    "web-dev": {
+      "projects": ["project-c"],
+      "topics": ["web", "frontend", "backend"]
+    },
+    "app-dev-mobile": {
+      "projects": ["project-c"],
+      "topics": ["mobile", "ios", "android"]
+    },
+    "data-science": {
+      "projects": ["project-a"],
+      "topics": ["data", "analytics", "ml"]
+    }
+  },
+
+  "slug_overrides": {
+    "_comment": "For specific books that should be tagged differently from their category default. The 'projects' list REPLACES the category default; the 'topics' list MERGES with category topics.",
+
+    "example-cross-cutting-book-slug": {
+      "projects": ["project-a", "project-b", "project-c"],
+      "topics": ["fundamental", "cross-cutting"]
+    },
+    "another-specific-book-slug": {
+      "projects": ["project-d"],
+      "topics": ["niche-topic"]
+    }
+  },
+
+  "chapter_keywords": {
+    "_comment": "Keywords to search for in chapter headings. When found, the listed topic tags get added to the book.",
+
+    "kubernetes": ["k8s", "containers", "orchestration"],
+    "docker": ["containers", "deployment"],
+    "security": ["security", "auth"],
+    "compliance": ["regulatory", "audit"],
+    "performance": ["optimization", "perf"],
+    "testing": ["tdd", "qa"],
+    "deployment": ["devops", "deploy"]
+  }
+}
