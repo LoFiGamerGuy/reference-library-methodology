@@ -176,6 +176,7 @@ This methodology is part of a small family of public reference material on agent
 - **[council-of-five](https://github.com/LoFiGamerGuy/council-of-five)** &middot; [live →](https://lofigamerguy.github.io/council-of-five/) — Multi-perspective decision framework. CC BY 4.0.
 - **[alpha-reader-toolkit](https://github.com/LoFiGamerGuy/alpha-reader-toolkit)** &middot; [live →](https://lofigamerguy.github.io/alpha-reader-toolkit/) — Pipeline for honest alpha-reader feedback on fiction manuscripts. MIT.
 - **[five-register-design-system](https://github.com/LoFiGamerGuy/five-register-design-system)** &middot; [live gallery →](https://lofigamerguy.github.io/five-register-design-system/) — Design system. MIT.
+- **[cross-platform-ai-dev-env-playbook](https://github.com/LoFiGamerGuy/cross-platform-ai-dev-env-playbook)** &middot; [live →](https://lofigamerguy.github.io/cross-platform-ai-dev-env-playbook/) — Concrete operational playbook for cross-platform agentic AI dev environments. CC BY 4.0.
 - **[terminal-stack](https://github.com/LoFiGamerGuy/terminal-stack)** — Opinionated terminal kit for Git Bash on Windows.
 - **[dotfiles](https://github.com/LoFiGamerGuy/dotfiles)** — Personal dotfiles.
 
