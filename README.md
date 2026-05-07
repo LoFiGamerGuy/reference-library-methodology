@@ -174,6 +174,7 @@ This methodology is part of a small family of public reference material on agent
 
 - **[share-ai-engineering-patterns](https://github.com/LoFiGamerGuy/share-ai-engineering-patterns)** &middot; [live catalogue →](https://lofigamerguy.github.io/share-ai-engineering-patterns/) — Practitioner's reference for building with AI agents. The "extract-then-synthesize" pattern documented in section 03 emerged from the methodology in this repo. CC BY 4.0.
 - **[council-of-five](https://github.com/LoFiGamerGuy/council-of-five)** &middot; [live →](https://lofigamerguy.github.io/council-of-five/) — Multi-perspective decision framework. CC BY 4.0.
+- **[alpha-reader-toolkit](https://github.com/LoFiGamerGuy/alpha-reader-toolkit)** &middot; [live →](https://lofigamerguy.github.io/alpha-reader-toolkit/) — Pipeline for honest alpha-reader feedback on fiction manuscripts. MIT.
 - **[five-register-design-system](https://github.com/LoFiGamerGuy/five-register-design-system)** &middot; [live gallery →](https://lofigamerguy.github.io/five-register-design-system/) — Design system. MIT.
 - **[terminal-stack](https://github.com/LoFiGamerGuy/terminal-stack)** — Opinionated terminal kit for Git Bash on Windows.
 - **[dotfiles](https://github.com/LoFiGamerGuy/dotfiles)** — Personal dotfiles.
