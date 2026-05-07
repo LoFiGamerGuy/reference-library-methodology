@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en" data-register="genkan">
+<head>
+<meta charset="utf-8">
+<title>Reference Library Methodology — AI-readable technical libraries</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A system for building a queryable, AI-readable technical reference library. Methodology, templates, and tools.">
+<link rel="stylesheet" href="css/genkan.css">
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7fcba264810c47d0b53cdf09f5becdcc"}'></script>
+<style>
+  .fo-masthead { border-top: 3px solid var(--fg); border-bottom: 1px solid var(--rule); padding: var(--space-5) 0; }
+  .fo-masthead__inner { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-5); }
+  .fo-masthead__brand { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: var(--fs-md); color: var(--fg); }
+  .fo-masthead__brand .glyph { font-family: var(--font-mono); font-style: normal; font-size: var(--fs-2xs); letter-spacing: var(--tracking-caps); color: var(--accent); border: 1px solid var(--accent); padding: 2px 6px; margin-right: var(--space-3); }
+  .fo-masthead__meta { font-family: var(--font-mono); font-size: var(--fs-2xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--fg-3); }
+  .fo-masthead__meta b { color: var(--fg); font-weight: 400; }
+  .fo-title-block { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: var(--space-9); align-items: end; padding: var(--space-9) 0 var(--space-8); border-bottom: 1px solid var(--rule); }
+  .fo-title { font-family: var(--font-display); font-weight: 400; font-size: clamp(48px, 7vw, 88px); line-height: 0.98; letter-spacing: -0.025em; color: var(--fg); }
+  .fo-title em { font-style: italic; font-weight: 300; color: var(--accent-deep); }
+  .fo-title-block__lede { font-family: var(--font-display); font-style: italic; font-size: var(--fs-lg); line-height: 1.45; color: var(--fg-2); border-left: 1px solid var(--accent); padding-left: var(--space-5); }
+  @media (max-width: 880px) { .fo-title-block { grid-template-columns: 1fr; } }
+  .fo-shelf { padding: var(--space-9) 0 var(--space-7); border-bottom: 1px solid var(--rule); }
+  .fo-shelf__head { display: grid; grid-template-columns: 80px 1fr; gap: var(--space-6); align-items: baseline; margin-bottom: var(--space-6); padding-bottom: var(--space-5); border-bottom: 1px solid var(--fg); }
+  .fo-shelf__num { font-family: var(--font-mono); font-size: var(--fs-2xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--accent); }
+  .fo-shelf__title { font-family: var(--font-display); font-weight: 400; font-size: var(--fs-2xl); line-height: 1.05; letter-spacing: var(--tracking-tight); color: var(--fg); }
+  .fo-shelf__title em { font-style: italic; font-weight: 300; color: var(--fg-2); }
+  .fo-shelf__intro { font-family: var(--font-display); font-style: italic; font-size: var(--fs-md); line-height: 1.6; color: var(--fg-2); max-width: 56ch; margin-bottom: var(--space-6); }
+  .fo-entry { display: grid; grid-template-columns: 60px minmax(0, 3fr) minmax(0, 5fr) auto; gap: var(--space-6); padding: var(--space-6) 0; border-bottom: 1px solid var(--rule-faint); transition: background var(--dur-fast) var(--ease); }
+  .fo-entry:hover { background: var(--bg-2); }
+  .fo-entry__num { font-family: var(--font-mono); font-size: var(--fs-2xs); letter-spacing: var(--tracking-caps); color: var(--accent); }
+  .fo-entry__title { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: var(--fs-xl); line-height: 1.15; color: var(--fg); margin-bottom: var(--space-2); }
+  .fo-entry__title a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; }
+  .fo-entry__title a:hover { border-bottom-color: var(--accent); }
+  .fo-entry__bibl { font-family: var(--font-mono); font-size: var(--fs-2xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--fg-3); }
+  .fo-entry__note { font-family: var(--font-body); font-size: var(--fs-sm); line-height: 1.65; color: var(--fg-2); text-wrap: pretty; max-width: 56ch; }
+  .fo-entry__meta { text-align: right; font-family: var(--font-mono); font-size: var(--fs-2xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--fg-3); line-height: 1.7; }
+  .fo-entry__meta .tag { border: 1px solid var(--rule); padding: 2px 6px; margin-bottom: var(--space-2); display: inline-block; color: var(--fg-2); }
+  .fo-entry__meta .tag--key { color: var(--accent); border-color: var(--accent); }
+  @media (max-width: 880px) { .fo-entry { grid-template-columns: 40px 1fr; } .fo-entry__note, .fo-entry__meta { grid-column: 2; } .fo-entry__meta { text-align: left; } }
+  .fo-feature { background: var(--bg-2); padding: var(--space-8); margin: var(--space-7) 0; border-top: 1px solid var(--accent); border-bottom: 1px solid var(--accent); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: var(--space-7); align-items: start; }
+  .fo-feature__cap { font-family: var(--font-mono); font-size: var(--fs-2xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-4); }
+  .fo-feature__title { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: var(--fs-3xl); line-height: 0.98; letter-spacing: -0.02em; color: var(--fg); margin-bottom: var(--space-4); }
+  .fo-feature__pull { font-family: var(--font-display); font-style: italic; font-size: var(--fs-lg); line-height: 1.4; color: var(--fg); border-left: 2px solid var(--accent); padding-left: var(--space-5); margin-bottom: var(--space-5); }
+  .fo-feature__note { font-size: var(--fs-sm); line-height: 1.7; color: var(--fg-2); }
+  .fo-feature__note a { color: var(--fg); border-bottom: 1px solid var(--accent); text-decoration: none; }
+  @media (max-width: 880px) { .fo-feature { grid-template-columns: 1fr; padding: var(--space-6); } }
+  .fo-colophon { border-top: 3px solid var(--fg); padding: var(--space-7) 0; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-7); margin-top: var(--space-8); }
+  .fo-colophon h5 { font-family: var(--font-mono); font-weight: 400; font-size: var(--fs-2xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-3); }
+  .fo-colophon p { font-size: var(--fs-sm); line-height: 1.65; color: var(--fg-2); }
+  .fo-colophon a { color: var(--fg); border-bottom: 1px solid var(--accent); text-decoration: none; }
+  .fo-colophon ul li { font-family: var(--font-mono); font-size: var(--fs-2xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--fg-2); line-height: 1.9; border-bottom: 1px dotted var(--rule); padding: 4px 0; display: flex; justify-content: space-between; }
+  .fo-colophon ul li b { color: var(--fg); font-weight: 400; }
+  @media (max-width: 880px) { .fo-colophon { grid-template-columns: 1fr; } }
+  .fo-feedback { border-top: 1px solid var(--rule); padding: var(--space-9) 0 var(--space-7); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: var(--space-7); }
+  .fo-feedback__head h3 { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: var(--fs-2xl); line-height: 1.05; letter-spacing: var(--tracking-tight); color: var(--fg); margin-bottom: var(--space-4); }
+  .fo-feedback__head .fo-feedback__cap { font-family: var(--font-mono); font-size: var(--fs-2xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-3); }
+  .fo-feedback__head p { font-size: var(--fs-sm); line-height: 1.65; color: var(--fg-2); margin-bottom: var(--space-3); }
+  .fo-feedback__head a { color: var(--fg); border-bottom: 1px solid var(--accent); text-decoration: none; }
+  .fo-feedback form { display: flex; flex-direction: column; gap: var(--space-4); }
+  .fo-feedback label { font-family: var(--font-mono); font-size: var(--fs-2xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--fg-3); display: block; margin-bottom: var(--space-2); }
+  .fo-feedback input, .fo-feedback textarea { font-family: var(--font-body); font-size: var(--fs-sm); color: var(--fg); background: var(--bg); border: 1px solid var(--rule); padding: var(--space-3) var(--space-4); width: 100%; box-sizing: border-box; transition: border-color var(--dur-fast) var(--ease); }
+  .fo-feedback input:focus, .fo-feedback textarea:focus { outline: none; border-color: var(--accent); }
+  .fo-feedback textarea { resize: vertical; min-height: 100px; font-family: var(--font-body); line-height: 1.55; }
+  .fo-feedback button { font-family: var(--font-mono); font-size: var(--fs-2xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; background: var(--fg); color: var(--bg); border: none; padding: var(--space-3) var(--space-5); cursor: pointer; align-self: flex-start; transition: background var(--dur-fast) var(--ease); }
+  .fo-feedback button:hover { background: var(--accent-deep); }
+  @media (max-width: 880px) { .fo-feedback { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="gk-shell">
+
+  <header class="gk-container fo-masthead">
+    <div class="fo-masthead__inner">
+      <div class="fo-masthead__brand"><span class="glyph">書</span>Reference Library Methodology · the catalogue</div>
+      <div class="fo-masthead__meta"><b>v1.0</b> · <b>May 2026</b> · <b>MIT</b></div>
+    </div>
+  </header>
+
+  <main class="gk-container">
+
+    <section class="fo-title-block">
+      <h1 class="fo-title">Build a queryable, <em>AI-readable</em> reference library.</h1>
+      <p class="fo-title-block__lede">
+        A system for turning your books, papers, and notes into long-term semantic memory for agentic AI sessions. Bring your own corpus; the methodology + tools handle the rest. Extract once, consume many times.
+      </p>
+    </section>
+
+    <section class="fo-feature">
+      <div>
+        <div class="fo-feature__cap">— start here</div>
+        <h2 class="fo-feature__title">Read the philosophy first.</h2>
+        <p class="fo-feature__pull">"A 26,000-line book → ~280-line distillation. 100× compression at the load-bearing material."</p>
+      </div>
+      <div>
+        <p class="fo-feature__note">Read <a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/METHODOLOGY.md"><b>METHODOLOGY.md</b></a> to understand the three-layer extraction-and-synthesis pipeline. Then <a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/docs/library-structure.md"><b>library-structure.md</b></a> for the directory layout. Then run <a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/tools/load_context.py"><b>load_context.py</b></a> against a small test library to see the session-quick-start output.</p>
+      </div>
+    </section>
+
+    <!-- The Pipeline -->
+    <section class="fo-shelf">
+      <div class="fo-shelf__head">
+        <div class="fo-shelf__num">— I</div>
+        <h3 class="fo-shelf__title">Documentation <em>— the methodology in six focused docs</em></h3>
+      </div>
+      <p class="fo-shelf__intro">Each doc explains one piece of the system. Read in order for adoption; skim by topic for reference.</p>
+
+      <div class="fo-entry">
+        <div class="fo-entry__num">1.1</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/docs/library-structure.md">Library Structure</a></div>
+          <div class="fo-entry__bibl">Directory layout · naming conventions · YAML schema</div>
+        </div>
+        <div class="fo-entry__note">The filesystem layout the methodology and tools assume. Categories, slugs, frontmatter, where the library lives relative to this repo.</div>
+        <div class="fo-entry__meta"><span class="tag tag--key">Foundation</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">1.2</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/docs/insights-extraction.md">INSIGHTS Extraction</a></div>
+          <div class="fo-entry__bibl">The prompt · costs · refinement</div>
+        </div>
+        <div class="fo-entry__note">What extraction does, what it costs (~$0.02-0.40/book), how to tune the prompt for your portfolio, when to refine manually.</div>
+        <div class="fo-entry__meta"><span class="tag">Pipeline</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">1.3</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/docs/synthesis-pattern.md">Synthesis Pattern</a></div>
+          <div class="fo-entry__bibl">Cross-book pattern docs</div>
+        </div>
+        <div class="fo-entry__note">When to write a synthesis (≥3 books on a topic). What it contains: consensus, disagreements, "best of," failure modes, open questions.</div>
+        <div class="fo-entry__meta"><span class="tag">Pattern</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">1.4</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/docs/project-maps.md">Project Maps</a></div>
+          <div class="fo-entry__bibl">Tier-ranked reading lists</div>
+        </div>
+        <div class="fo-entry__note">Per-project book maps in tiers (load-bearing / consult / context). The routing layer that connects your library to active work.</div>
+        <div class="fo-entry__meta"><span class="tag">Pattern</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">1.5</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/docs/mcp-server.md">MCP Server</a></div>
+          <div class="fo-entry__bibl">TF-IDF search · Claude Code integration</div>
+        </div>
+        <div class="fo-entry__note">Expose the library as a queryable MCP server — search_library, get_book_insights, get_project_context. No API key, no vector DB, fully local.</div>
+        <div class="fo-entry__meta"><span class="tag">Integration</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">1.6</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/docs/copyright-tiers.md">Copyright Tiers</a></div>
+          <div class="fo-entry__bibl">Tier A · B · C acquisition framework</div>
+        </div>
+        <div class="fo-entry__note">Be explicit about acquisition status. Tier A (citations + summary) is the floor; B (public domain) and C (legitimately purchased) layer on. Tier D (gray-channel) forbidden.</div>
+        <div class="fo-entry__meta"><span class="tag">Discipline</span></div>
+      </div>
+    </section>
+
+    <!-- Tools -->
+    <section class="fo-shelf">
+      <div class="fo-shelf__head">
+        <div class="fo-shelf__num">— II</div>
+        <h3 class="fo-shelf__title">Python Tools <em>— eight scripts for building and querying</em></h3>
+      </div>
+      <p class="fo-shelf__intro">All driven by <code>REFERENCE_LIBRARY_ROOT</code> env var or <code>--library</code> flag. Tools live here; library lives wherever you keep it.</p>
+
+      <div class="fo-entry">
+        <div class="fo-entry__num">2.1</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/tools/batch_extract_insights.py">batch_extract_insights.py</a></div>
+          <div class="fo-entry__bibl">INSIGHTS extraction via Anthropic API</div>
+        </div>
+        <div class="fo-entry__note">Scans library for books without INSIGHTS, runs extraction (haiku or sonnet), writes results. Rate-limited, resumable, cost-tracked.</div>
+        <div class="fo-entry__meta"><span class="tag tag--key">Core</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">2.2</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/tools/load_context.py">load_context.py</a></div>
+          <div class="fo-entry__bibl">Session quick-start generator</div>
+        </div>
+        <div class="fo-entry__note">Run at session start: produces a context block with the right books at the right priority for a given project. Pipe to clipboard with <code>--clip</code>.</div>
+        <div class="fo-entry__meta"><span class="tag tag--key">Core</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">2.3</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/tools/mcp_server.py">mcp_server.py</a></div>
+          <div class="fo-entry__bibl">MCP server with TF-IDF search</div>
+        </div>
+        <div class="fo-entry__note">Register with Claude Code; agents can search the library, fetch book INSIGHTS, get project context — all via standard MCP tool calls.</div>
+        <div class="fo-entry__meta"><span class="tag tag--key">Integration</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">2.4</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/tools/regenerate_inventory.py">regenerate_inventory.py</a></div>
+          <div class="fo-entry__bibl">INVENTORY.md generator</div>
+        </div>
+        <div class="fo-entry__note">Scans every content.md, reads frontmatter, produces a top-level inventory. Run after adding books.</div>
+        <div class="fo-entry__meta"><span class="tag">Maintenance</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">2.5</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/tools/tag_library.py">tag_library.py</a></div>
+          <div class="fo-entry__bibl">Config-driven YAML frontmatter tagger</div>
+        </div>
+        <div class="fo-entry__note">Generic tagger driven by a JSON config. Maps categories + book slugs + chapter keywords to project tags.</div>
+        <div class="fo-entry__meta"><span class="tag">Maintenance</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">2.6</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/tools/epub_to_md.py">epub_to_md.py</a></div>
+          <div class="fo-entry__bibl">EPUB → markdown</div>
+        </div>
+        <div class="fo-entry__note">Token-efficient EPUB extraction with image preservation and metadata.</div>
+        <div class="fo-entry__meta"><span class="tag">Acquisition</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">2.7</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/tools/extract_all_bundles.py">extract_all_bundles.py</a></div>
+          <div class="fo-entry__bibl">Bulk EPUB ingestion</div>
+        </div>
+        <div class="fo-entry__note">Inbox → library batch extraction with optional skip list.</div>
+        <div class="fo-entry__meta"><span class="tag">Acquisition</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">2.8</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/tools/fix_image_paths.py">fix_image_paths.py</a></div>
+          <div class="fo-entry__bibl">Path normalization utility</div>
+        </div>
+        <div class="fo-entry__note">Normalizes image references in content.md after import. Run when image paths drift.</div>
+        <div class="fo-entry__meta"><span class="tag">Utility</span></div>
+      </div>
+    </section>
+
+    <!-- Templates -->
+    <section class="fo-shelf">
+      <div class="fo-shelf__head">
+        <div class="fo-shelf__num">— III</div>
+        <h3 class="fo-shelf__title">Templates <em>— schema starting points</em></h3>
+      </div>
+      <p class="fo-shelf__intro">Copy these into your library and fill in your content. The schemas are the load-bearing convention; the body is yours.</p>
+
+      <div class="fo-entry">
+        <div class="fo-entry__num">3.1</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/templates/book-frontmatter.template.md">Book Frontmatter</a></div>
+          <div class="fo-entry__bibl">YAML schema for content.md</div>
+        </div>
+        <div class="fo-entry__note">Title, authors, publisher, ISBN, category, acquisition tier, projects, tags. The minimum viable schema for a book entry.</div>
+        <div class="fo-entry__meta"><span class="tag">Schema</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">3.2</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/templates/INSIGHTS.template.md">INSIGHTS Template</a></div>
+          <div class="fo-entry__bibl">What an extracted INSIGHTS file looks like</div>
+        </div>
+        <div class="fo-entry__note">Frontmatter + sections by use case (not chapter order) + project relevance summary at the end. Pattern the model follows.</div>
+        <div class="fo-entry__meta"><span class="tag">Schema</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">3.3</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/templates/synthesis-doc.template.md">Synthesis Doc</a></div>
+          <div class="fo-entry__bibl">Cross-book pattern document</div>
+        </div>
+        <div class="fo-entry__note">Consensus, disagreements, "best of," failure modes, open questions, project application notes.</div>
+        <div class="fo-entry__meta"><span class="tag">Schema</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">3.4</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/templates/project-map.template.md">Project Map</a></div>
+          <div class="fo-entry__bibl">Per-project tier-ranked reading list</div>
+        </div>
+        <div class="fo-entry__note">Tier 1 (load-bearing), Tier 2 (consult on demand), Tier 3 (context). Drives the session quick-start tool.</div>
+        <div class="fo-entry__meta"><span class="tag">Schema</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">3.5</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/templates/inventory.template.md">Inventory</a></div>
+          <div class="fo-entry__bibl">Top-level catalog format</div>
+        </div>
+        <div class="fo-entry__note">Auto-generated by regenerate_inventory.py; this template shows the format.</div>
+        <div class="fo-entry__meta"><span class="tag">Reference</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">3.6</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/templates/tagging-config.template.json">Tagging Config</a></div>
+          <div class="fo-entry__bibl">JSON config for tag_library.py</div>
+        </div>
+        <div class="fo-entry__note">Maps library categories + specific book slugs + chapter keywords to project tags. Customize for your portfolio.</div>
+        <div class="fo-entry__meta"><span class="tag">Config</span></div>
+      </div>
+    </section>
+
+    <!-- Examples -->
+    <section class="fo-shelf">
+      <div class="fo-shelf__head">
+        <div class="fo-shelf__num">— IV</div>
+        <h3 class="fo-shelf__title">Examples <em>— see what the artifacts actually look like</em></h3>
+      </div>
+      <p class="fo-shelf__intro">Three fully-anonymized examples using real foundational books (Pragmatic Programmer, Clean Code, Effective Java) so you can see the format in action.</p>
+
+      <div class="fo-entry">
+        <div class="fo-entry__num">4.1</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/examples/INSIGHTS-example.md">INSIGHTS Example</a></div>
+          <div class="fo-entry__bibl">The Pragmatic Programmer (20th ed)</div>
+        </div>
+        <div class="fo-entry__note">A fully-worked INSIGHTS file. 10 patterns extracted, organized by use case, with project relevance summary.</div>
+        <div class="fo-entry__meta"><span class="tag tag--key">Highest signal</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">4.2</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/examples/synthesis-example.md">Synthesis Example</a></div>
+          <div class="fo-entry__bibl">Error handling across 3 books</div>
+        </div>
+        <div class="fo-entry__note">A cross-book synthesis on error handling, drawing from Pragmatic Programmer + Clean Code + Effective Java.</div>
+        <div class="fo-entry__meta"><span class="tag">Pattern</span></div>
+      </div>
+      <div class="fo-entry">
+        <div class="fo-entry__num">4.3</div>
+        <div>
+          <div class="fo-entry__title"><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/examples/project-map-example.md">Project Map Example</a></div>
+          <div class="fo-entry__bibl">Backend API Refresh</div>
+        </div>
+        <div class="fo-entry__note">A real-shape project map with tier-ranked books, synthesis doc references, key patterns extraction, and coverage notes.</div>
+        <div class="fo-entry__meta"><span class="tag">Pattern</span></div>
+      </div>
+    </section>
+
+    <!-- Feedback -->
+    <section class="fo-feedback">
+      <div class="fo-feedback__head">
+        <div class="fo-feedback__cap">— for non-github readers</div>
+        <h3>Send a quick note.</h3>
+        <p>Adopting this methodology yourself? Hit a problem with the tools? Have a war story? This form goes straight to the maintainer.</p>
+        <p>If you have a GitHub account, <a href="https://github.com/LoFiGamerGuy/reference-library-methodology/issues/new">opening an issue</a> is preferred. This form is the path for everyone else.</p>
+      </div>
+      <form action="https://formspree.io/f/xnjwzzew" method="POST">
+        <div>
+          <label for="fb-name">Your name (optional)</label>
+          <input id="fb-name" type="text" name="name">
+        </div>
+        <div>
+          <label for="fb-email">Your email (optional, for reply)</label>
+          <input id="fb-email" type="email" name="email">
+        </div>
+        <input type="hidden" name="_subject" value="Reference Library Methodology — feedback">
+        <div>
+          <label for="fb-message">Message</label>
+          <textarea id="fb-message" name="message" required></textarea>
+        </div>
+        <button type="submit">Send →</button>
+      </form>
+    </section>
+
+    <footer class="fo-colophon">
+      <div>
+        <h5>About</h5>
+        <p>Designed and built by Ryan Gosnell. Distilled from operating a real library at ~150-book scale across ~10 categories. The patterns work; the costs are real.</p>
+        <p style="margin-top: var(--space-3);">Source on GitHub. <a href="https://github.com/LoFiGamerGuy/reference-library-methodology">Repo README →</a></p>
+        <p style="margin-top: var(--space-3);"><b>Related public repos:</b></p>
+        <ul style="margin-top: var(--space-2);">
+          <li><a href="https://lofigamerguy.github.io/share-ai-engineering-patterns/">share-ai-engineering-patterns</a></li>
+          <li><a href="https://lofigamerguy.github.io/council-of-five/">council-of-five</a></li>
+          <li><a href="https://lofigamerguy.github.io/alpha-reader-toolkit/">alpha-reader-toolkit</a></li>
+          <li><a href="https://lofigamerguy.github.io/cross-platform-ai-dev-env-playbook/">cross-platform-ai-dev-env-playbook</a></li>
+          <li><a href="https://lofigamerguy.github.io/five-register-design-system/">five-register-design-system</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>License</h5>
+        <p><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/LICENSE">MIT</a> with copyright-tier disclaimer for derivative works.</p>
+      </div>
+      <div>
+        <h5>Quick links</h5>
+        <ul>
+          <li><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/METHODOLOGY.md">Methodology</a> <b>MD</b></li>
+          <li><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/CONTRIBUTING.md">Contributing</a> <b>MD</b></li>
+          <li><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/CHANGELOG.md">Changelog</a> <b>MD</b></li>
+          <li><a href="https://github.com/LoFiGamerGuy/reference-library-methodology/blob/main/.env.example">.env.example</a> <b>FILE</b></li>
+        </ul>
+      </div>
+    </footer>
+
+  </main>
+
+</div>
+
+</body>
+</html>
